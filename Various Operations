@@ -1,0 +1,39 @@
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset
+train_df = pd.read_csv('train.csv')
+test_df = pd.read_csv('test.csv')
+
+# Combine the train and test datasets
+full_df = pd.concat([train_df, test_df])
+
+# Check for missing values
+print(full_df.isnull().sum())
+
+# Fill missing values in the 'Age' column with the median age
+full_df['Age'] = full_df['Age'].fillna(full_df['Age'].median())
+
+# Fill missing values in the 'Embarked' column with the most frequent value
+full_df['Embarked'] = full_df['Embarked'].fillna(full_df['Embarked'].mode()[0])
+
+# Transform the 'Sex' column into a numerical column
+full_df['Sex'] = full_df['Sex'].map({'male': 0, 'female': 1})
+
+# Transform the 'Embarked' column into a numerical column
+full_df['Embarked'] = full_df['Embarked'].map({'S': 0, 'C': 1, 'Q': 2})
+
+# Visualize the distribution of the 'Age' column
+plt.figure(figsize=(10, 6))
+sns.distplot(full_df['Age'])
+plt.title('Distribution of Age')
+plt.show()
+
+# Visualize the relationship between 'Age' and 'Survived'
+plt.figure(figsize=(10, 6))
+sns.boxplot(x='Survived', y='Age', data=full_df)
+plt.title('Relationship between Age and Survived')
+plt.show()
